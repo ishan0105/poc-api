@@ -16,7 +16,18 @@ provider:
   apiGateway:
     restApiId: 28ivb3d4wd
     restApiRootResourceId: g6rv8zq0uc
- 
+
+custom:
+  headers:
+    - Content-Type
+    - X-Amz-Date
+    - Authorization
+    - X-Api-Key
+    - X-Amz-Security-Token
+    - X-Amz-User-Agent
+    - Language
+    - X-Requested-With
+
 functions:
   api:
     handler: handler.handler
@@ -26,175 +37,76 @@ functions:
           method: get
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true
       - http:
           path: /get-tasks-by-username
           method: post
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /add-user
           method: post
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /add-task
           method: post
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /get-single-task
           method: post
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /get-single-user
           method: post
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /get-all-tasks
           method: get
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /update-user/{id}
           method: put
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /update-task/{id}
           method: put
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /delete-task/{id}
           method: delete
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
- 
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /delete-user/{id}
           method: delete
           cors:
             origin: "*"
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - Language
-              - X-Requested-With
-            allowCredentials: true
-
+            headers: ${self:custom.headers}
+          allowCredentials: true
             #test
