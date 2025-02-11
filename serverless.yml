@@ -132,3 +132,12 @@ functions:
           integration: lambda
           alias: ${self:provider.stage}
             #test
+resources:
+  Resources:
+    CurrentLambdaVersionSSM:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: /${self:service}/${self:provider.stage}/current-lambda-version
+        Type: String
+        Value: !GetAtt ApiLambdaVersion.Version
+        Description: "Stores the current Lambda version ARN"
