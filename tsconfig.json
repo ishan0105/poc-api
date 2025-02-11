@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "lib": [
+            "es6"
+        ],
+        "moduleResolution": "node",
+        "rootDir": "./",
+        "sourceMap": true,
+        "allowJs": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "noImplicitReturns": true,
+        "preserveConstEnums": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": [
+            "src/types",
+            "./node_modules/@types"
+        ],
+        "ignoreDeprecations": "5.0"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

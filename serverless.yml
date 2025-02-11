@@ -1,0 +1,223 @@
+service: poc-serverless-typescript
+
+plugins:
+#  - serverless-offline
+#  - serverless login
+  - serverless-esbuild
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  timeout: 30
+  region: eu-west-1
+  environment:
+    NODE_ENV: development
+
+custom:
+  version: v1
+  apiGatewayId: 28ivb3d4wd
+  apiGatewayRestApiRootResourceId: g6rv8zq0uc
+  # serverless-offline:
+    # httpPort: 3000
+  esbuild:
+    minify: true
+    exclude: []
+    watch:
+      pattern: ["./**/*.ts"]
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - http:
+          path: /get-all-users
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /get-tasks-by-username
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+        restApiId: 28ivb3d4wd
+        restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /add-user
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /add-task
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /get-single-task
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /get-single-user
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /get-all-tasks
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /update-user/{id}
+          method: put
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /update-task/{id}
+          method: put
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /delete-task/{id}
+          method: delete
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
+      - http:
+          path: /delete-user/{id}
+          method: delete
+          request:
+            parameters:
+              paths:
+                id: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Language
+              - X-Requested-With
+          restApiId: 28ivb3d4wd
+          restApiRootResourceId: g6rv8zq0uc
