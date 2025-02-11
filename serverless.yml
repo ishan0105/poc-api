@@ -10,20 +10,13 @@ provider:
   runtime: nodejs20.x
   timeout: 30
   region: eu-west-1
+  stackName: poc-api
   environment:
     NODE_ENV: development
-
-custom:
-  version: v1
-  apiGatewayId: 28ivb3d4wd
-  apiGatewayRestApiRootResourceId: g6rv8zq0uc
-  # serverless-offline:
-    # httpPort: 3000
-  esbuild:
-    minify: true
-    exclude: []
-    watch:
-      pattern: ["./**/*.ts"]
+  stage: ${opt:stage, 'dev'}
+  apiGateway:
+    restApiId: 28ivb3d4wd
+    restApiRootResourceId: g6rv8zq0uc
 
 functions:
   api:
@@ -43,8 +36,12 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
+          request:
+            parameters:
+              paths:
+                stage: true
       - http:
           path: /get-tasks-by-username
           method: post
@@ -59,8 +56,12 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-        restApiId: 28ivb3d4wd
-        restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
+          request:
+            parameters:
+              paths:
+                stage: true          
       - http:
           path: /add-user
           method: post
@@ -75,8 +76,12 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
+          request:
+            parameters:
+              paths:
+                stage: true          
       - http:
           path: /add-task
           method: post
@@ -91,8 +96,12 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
+          request:
+            parameters:
+              paths:
+                stage: true          
       - http:
           path: /get-single-task
           method: post
@@ -107,8 +116,12 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
+          request:
+            parameters:
+              paths:
+                stage: true          
       - http:
           path: /get-single-user
           method: post
@@ -123,8 +136,12 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
+          request:
+            parameters:
+              paths:
+                stage: true        
       - http:
           path: /get-all-tasks
           method: get
@@ -139,14 +156,19 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
+          request:
+            parameters:
+              paths:
+                stage: true
       - http:
           path: /update-user/{id}
           method: put
           request:
             parameters:
               paths:
+                stage: true
                 id: true
           cors:
             origin: "*"
@@ -159,14 +181,16 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
+
       - http:
           path: /update-task/{id}
           method: put
           request:
             parameters:
               paths:
+                stage: true
                 id: true
           cors:
             origin: "*"
@@ -179,14 +203,15 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
       - http:
           path: /delete-task/{id}
           method: delete
           request:
             parameters:
               paths:
+                stage: true
                 id: true
           cors:
             origin: "*"
@@ -199,14 +224,15 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
+
       - http:
           path: /delete-user/{id}
           method: delete
           request:
             parameters:
               paths:
+                stage: true            
                 id: true
           cors:
             origin: "*"
@@ -219,5 +245,4 @@ functions:
               - X-Amz-User-Agent
               - Language
               - X-Requested-With
-          restApiId: 28ivb3d4wd
-          restApiRootResourceId: g6rv8zq0uc
+            allowCredentials: true
