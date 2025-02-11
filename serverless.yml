@@ -9,20 +9,25 @@ provider:
   runtime: nodejs20.x
   timeout: 30
   region: eu-west-1
+  stackName: poc-api
   environment:
     NODE_ENV: development
+  stage: ${opt:stage, 'test'}
+  apiGateway:
+    restApiId: 28ivb3d4wd
+    restApiRootResourceId: g6rv8zq0uc
 
-custom:
-  version: v1
-  apiGatewayId: amumt5qu31
-  apiGatewayRestApiRootResourceId: ed4itj2h24
-  serverless-offline:
-    httpPort: 3000
-  esbuild:
-    minify: true
-    exclude: []
-    watch:
-      pattern: ["./**/*.ts"]
+#custom:
+ # version: v1
+  #apiGatewayId: amumt5qu31
+#  apiGatewayRestApiRootResourceId: ed4itj2h24
+ # serverless-offline:
+  #  httpPort: 3000
+#  esbuild:
+ #   minify: true
+  #  exclude: []
+   # watch:
+    #  pattern: ["./**/*.ts"]
 
 functions:
   api:
