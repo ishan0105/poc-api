@@ -1,9 +1,9 @@
 service: poc-serverless-typescript
-
+ 
 plugins:
   - serverless-offline
   - serverless-esbuild
-
+ 
 provider:
   name: aws
   runtime: nodejs20.x
@@ -17,17 +17,16 @@ provider:
     restApiId: 28ivb3d4wd
     restApiRootResourceId: g6rv8zq0uc
 
-#custom:
- # version: v1
-  #apiGatewayId: amumt5qu31
-#  apiGatewayRestApiRootResourceId: ed4itj2h24
- # serverless-offline:
-  #  httpPort: 3000
-#  esbuild:
- #   minify: true
-  #  exclude: []
-   # watch:
-    #  pattern: ["./**/*.ts"]
+custom:
+  headers:
+    - Content-Type
+    - X-Amz-Date
+    - Authorization
+    - X-Api-Key
+    - X-Amz-Security-Token
+    - X-Amz-User-Agent
+    - Language
+    - X-Requested-With
 
 functions:
   api:
@@ -36,82 +35,77 @@ functions:
       - http:
           path: /get-all-users
           method: get
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true
       - http:
           path: /get-tasks-by-username
           method: post
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /add-user
           method: post
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /add-task
           method: post
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /get-single-task
           method: post
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /get-single-user
           method: post
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /get-all-tasks
           method: get
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /update-user/{id}
           method: put
-          request:
-            parameters:
-              paths:
-                id: true
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /update-task/{id}
           method: put
-          request:
-            parameters:
-              paths:
-                id: true
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /delete-task/{id}
           method: delete
-          request:
-            parameters:
-              paths:
-                id: true
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true 
       - http:
           path: /delete-user/{id}
           method: delete
-          request:
-            parameters:
-              paths:
-                id: true
-          cors: true
-          restApiId: amumt5qu31
-          restApiRootResourceId: ed4itj2h24
+          cors:
+            origin: "*"
+            headers: ${self:custom.headers}
+          allowCredentials: true
