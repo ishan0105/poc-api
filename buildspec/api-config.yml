@@ -1,0 +1,12 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo "Installing Serverless Framework"
+      - npm install -g serverless@3.39.0
+      - serverless --version # Verify Serverless installation
+      - npm i -f
+  build:
+    commands:
+      - echo "Building the application"
+      - serverless deploy --region eu-west-1
