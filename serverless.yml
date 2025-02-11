@@ -3,7 +3,7 @@ service: poc-serverless-typescript
 plugins:
   - serverless-offline
   - serverless-esbuild
- 
+
 provider:
   name: aws
   runtime: nodejs20.x
@@ -39,69 +39,89 @@ functions:
             origin: "*"
             headers: ${self:custom.headers}
           allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /get-tasks-by-username
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true 
+          allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /add-user
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true 
+          allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /add-task
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true 
+          allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /get-single-task
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true 
+          allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /get-single-user
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true 
+          allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /get-all-tasks
           method: get
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true 
+          allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /update-user/{id}
           method: put
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true 
+          allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /update-task/{id}
           method: put
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true 
+          allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /delete-task/{id}
           method: delete
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true 
+          allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
       - http:
           path: /delete-user/{id}
           method: delete
@@ -109,4 +129,6 @@ functions:
             origin: "*"
             headers: ${self:custom.headers}
           allowCredentials: true
+          integration: lambda
+          alias: ${self:provider.stage}
             #test
