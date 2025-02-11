@@ -1,7 +1,7 @@
 service: poc-serverless-typescript
 
 plugins:
-#  - serverless-offline
+  - serverless-offline
 #  - serverless login
   - serverless-esbuild
 

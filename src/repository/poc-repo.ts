@@ -1,26 +1,26 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import Task from "../models/task";
 import User from "../models/user";
 
-interface ApiResponse {
-  statusCode: number;
-  body: any;
-  headers?: { [key: string]: string | boolean };
-}
+// interface ApiResponse {
+//   statusCode: number;
+//   body: any;
+//   headers?: { [key: string]: string | boolean };
+// }
 
-export const getAllUsers = async (): Promise<ApiResponse> => {
+export const getAllUsers = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const result = await User.findAll();
 
     if (!result || result.length === 0) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: { error: "No users found" },
-      };
+      return res
+        .status(404)
+        .header("Access-Control-Allow-Origin", "*")
+        .header("Access-Control-Allow-Credentials", "true")
+        .json({ error: "No users found" });
     }
 
     const formattedUsers = result.map((user) => ({
@@ -28,108 +28,68 @@ export const getAllUsers = async (): Promise<ApiResponse> => {
       password: user.password,
     }));
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: formattedUsers,
-    };
+    return res
+      .status(200)
+      .header("Access-Control-Allow-Origin", "*")
+      .header("Access-Control-Allow-Credentials", "true")
+      .json(formattedUsers);
   } catch (err: any) {
     console.error("Error fetching users:", err);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: { error: err.message },
-    };
+
+    return res
+      .status(500)
+      .header("Access-Control-Allow-Origin", "*")
+      .header("Access-Control-Allow-Credentials", "true")
+      .json({ error: err.message });
   }
 };
 
-export const getTaskByUsername = async (req: Request): Promise<ApiResponse> => {
-  console.log(req.body);
+export const getTaskByUsername = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { username } = req.body;
   try {
     if (!username) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({
-          message: "username is required.",
-        }),
-      };
+      res.status(400).json({
+        message: "username is required.",
+      });
+      return;
     }
 
     const user = await User.findOne({ where: { username: username } });
     if (!user) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({
-          message: `User with username: ${username} not found`,
-        }),
-      };
+      res.status(404).json({
+        message: `User with username: ${username} not found`,
+      });
+      return;
     }
 
     const result = await Task.findAll({ where: { user_id: user.id } });
 
     if (!result) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ error: "Task not found" }),
-      };
+      res.status(404).json({ error: "Task not found" });
+      return;
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        message: "Task fetched successfully!",
-        task: result,
-      }),
-    };
+    res.status(200).json({
+      message: "Task fetched successfully!",
+      task: result,
+    });
   } catch (err: any) {
-    console.log("Error getting task", err.message);
-    return {
-      statusCode: 501,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ error: err.message }),
-    };
+    res.status(501).json({
+      error: err.message,
+    });
   }
 };
 
-export const getAllTasks = async (): Promise<ApiResponse> => {
+export const getAllTasks = async (res: Response): Promise<void> => {
   try {
     const result = await Task.findAll();
 
     if (!result || result.length === 0) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: { error: "No users found" },
-      };
+      res.status(404).json({ error: "No users found" });
+      return;
     }
 
     const formattedUsers = result.map((task) => ({
@@ -138,45 +98,22 @@ export const getAllTasks = async (): Promise<ApiResponse> => {
       istaskcompleted: task.istaskcompleted,
     }));
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: formattedUsers,
-    };
+    res.status(200).json(formattedUsers);
   } catch (err: any) {
-    console.error("Error fetching users:", err);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: { error: err.message },
-    };
+    res.status(500).json({
+      error: err.message,
+    });
   }
 };
 
-export const addUser = async (req: Request): Promise<ApiResponse> => {
-  console.log("addUser called");
-  console.log(req.body);
+export const addUser = async (req: Request, res: Response): Promise<void> => {
   const { username, password } = req.body;
-  console.log("Username: " + username);
-  console.log("Password: " + password);
   try {
     if (!username || !password) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({
-          message: "Both username and password are required.",
-        }),
-      };
+      res.status(400).json({
+        message: "Both username and password are required.",
+      });
+      return;
     }
 
     const newUser = await User.create(
@@ -184,45 +121,25 @@ export const addUser = async (req: Request): Promise<ApiResponse> => {
       { fields: ["username", "password"] }
     );
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        message: "User created successfully!",
-        user: newUser,
-      }),
-    };
+    res.status(200).json({
+      message: "User created successfully!",
+      user: newUser,
+    });
   } catch (err: any) {
-    console.error("Error creating user:", err.message);
-    return {
-      statusCode: 501,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ error: err.message }),
-    };
+    res.status(501).json({
+      error: err.message,
+    });
   }
 };
 
-export const addTask = async (req: Request): Promise<ApiResponse> => {
+export const addTask = async (req: Request, res: Response): Promise<void> => {
   const { username, task_name, task_priority } = req.body;
-  console.log("Username: " + username);
   try {
     if (!username || !task_name || !task_priority) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({
-          message: "user name, task name and task priority are required.",
-        }),
-      };
+      res.status(400).json({
+        message: "user name, task name and task priority are required.",
+      });
+      return;
     }
 
     const user = await User.findOne({ where: { username: username } });
@@ -230,174 +147,112 @@ export const addTask = async (req: Request): Promise<ApiResponse> => {
     if (user != null) {
       user_id = user.id;
     }
-    console.log("User ID: " + user_id);
+
     const newTask = await Task.create(
       { user_id, task_name, task_priority, istaskcompleted: false },
       { fields: ["user_id", "task_name", "task_priority", "istaskcompleted"] }
     );
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        message: "Task created successfully!",
-        user: newTask,
-      }),
-    };
+    res.status(200).json({
+      message: "Task created successfully!",
+      user: newTask,
+    });
   } catch (err: any) {
-    console.error("Error creating task:", err.message);
-    return {
-      statusCode: 501,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ error: err.message }),
-    };
+    res.status(501).json({
+      error: err.message,
+    });
   }
 };
 
-export const getTaskById = async (req: Request): Promise<ApiResponse> => {
+export const getTaskById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.body;
   try {
     if (!id) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({
-          message: "task id is required.",
-        }),
-      };
+      res.status(400).json({ message: "task id is required." });
+      return;
     }
 
     const result = await Task.findOne({ where: { id: id } });
 
     if (!result) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ error: "Task not found" }),
-      };
+      res.status(404).json({ error: "Task not found" });
+      return;
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        message: "Task fetched successfully!",
-        task: result,
-      }),
-    };
+    res.status(200).json({
+      message: "Task fetched successfully!",
+      task: result,
+    });
   } catch (err: any) {
     console.log("Error getting task", err.message);
-    return {
-      statusCode: 501,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ error: err.message }),
-    };
+    res.status(501).json({ error: err.message });
   }
 };
 
-export const getUserById = async (req: Request): Promise<ApiResponse> => {
+export const getUserById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.body;
   try {
     if (!id) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({
-          message: "user id is required.",
-        }),
-      };
+      res.status(400).json({ message: "user id is required." });
+      return;
     }
 
     const result = await User.findOne({ where: { id: id } });
 
     if (!result) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ error: "User not found" }),
-      };
+      res.status(404).json({ error: "User not found" });
+      return;
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        message: "User fetched successfully!",
-        user: result,
-      }),
-    };
+    res.status(200).json({
+      message: "User fetched successfully!",
+      user: result,
+    });
   } catch (err: any) {
     console.log("Error getting user", err.message);
-    return {
-      statusCode: 501,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ error: err.message }),
-    };
+    res.status(501).json({ error: err.message });
   }
 };
 
-export const updateTask = async (req: Request): Promise<ApiResponse> => {
+export const updateTask = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
     const { task_name, task_priority, istaskcompleted } = req.body;
 
-    console.log("Body: ", task_name, task_priority, istaskcompleted);
-
     if (istaskcompleted == null && !task_name && !task_priority) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({
-          error:
-            "At least one field (task name, task priority, or isTaskCompleted) must be provided.",
-        }),
-      };
+      res.status(400).json({
+        error:
+          "At least one field (task name, task priority, or isTaskCompleted) must be provided.",
+      });
+      return;
+    }
+
+    if (
+      task_priority &&
+      (task_priority != "high" &&
+        task_priority != "medium" &&
+        task_priority != "low")
+    ) {
+      res.status(400).json({
+        error: "Task priority can be either high, medium or low",
+      });
+      return;
     }
 
     const task = await Task.findByPk(id);
 
     if (!task) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ error: "Task not found." }),
-      };
+      res.status(404).json({ error: "Task not found." });
+      return;
     }
 
     const updatedTask = await task.update({
@@ -406,59 +261,36 @@ export const updateTask = async (req: Request): Promise<ApiResponse> => {
       istaskcompleted: istaskcompleted,
     });
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        message: "Task updated successfully.",
-        task: updatedTask,
-      }),
-    };
+    res.status(200).json({
+      message: "Task updated successfully.",
+      task: updatedTask,
+    });
   } catch (error: any) {
     console.error("Error updating task:", error.message);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ error: "Internal server error." }),
-    };
+    res.status(500).json({ error: "Internal server error." });
   }
 };
 
-export const updateUser = async (req: Request): Promise<ApiResponse> => {
+export const updateUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
     const { username, password } = req.body;
 
     if (!username && !password) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({
-          error: "At least one field (username or password) must be provided.",
-        }),
-      };
+      res.status(400).json({
+        error: "At least one field (username or password) must be provided.",
+      });
+      return;
     }
 
     const user = await User.findByPk(id);
 
     if (!user) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ error: "User not found." }),
-      };
+      res.status(404).json({ error: "User not found." });
+      return;
     }
 
     const updatedUser = await user.update({
@@ -466,110 +298,62 @@ export const updateUser = async (req: Request): Promise<ApiResponse> => {
       password: password,
     });
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        message: "User updated successfully.",
-        task: updatedUser,
-      }),
-    };
+    res.status(200).json({
+      message: "User updated successfully.",
+      user: updatedUser,
+    });
   } catch (error: any) {
     console.error("Error updating user:", error.message);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ error: "Internal server error." }),
-    };
+    res.status(500).json({ error: "Internal server error." });
   }
 };
 
-export const deleteTask = async (req: Request): Promise<ApiResponse> => {
+export const deleteTask = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
 
     const task = await Task.findByPk(id);
 
     if (!task) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ error: "Task not found." }),
-      };
+      res.status(404).json({ error: "Task not found." });
+      return;
     }
 
     await task.destroy();
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        message: "Task deleted successfully",
-      }),
-    };
+    res.status(200).json({
+      message: "Task deleted successfully",
+    });
   } catch (error: any) {
     console.error("Error deleting task:", error.message);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ error: "Internal server error." }),
-    };
+    res.status(500).json({ error: "Internal server error." });
   }
 };
 
-export const deleteUser = async (req: Request): Promise<ApiResponse> => {
+export const deleteUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id } = req.params;
 
     const user = await User.findByPk(id);
 
     if (!user) {
-      return {
-        statusCode: 404,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-        body: JSON.stringify({ error: "User not found." }),
-      };
+      res.status(404).json({ error: "User not found." });
+      return;
     }
 
     await user.destroy();
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({
-        message: "User deleted successfully",
-      }),
-    };
+    res.status(200).json({
+      message: "User deleted successfully",
+    });
   } catch (error: any) {
     console.error("Error deleting user:", error.message);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-      },
-      body: JSON.stringify({ error: "Internal server error." }),
-    };
+    res.status(500).json({ error: "Internal server error." });
   }
 };
