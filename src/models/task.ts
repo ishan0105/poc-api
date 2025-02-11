@@ -55,6 +55,7 @@ Task.init(
     },
     task_deadline: {
       type: DataTypes.DATE,
+      allowNull: true
     }
   },
   {
