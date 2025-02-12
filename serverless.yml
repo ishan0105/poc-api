@@ -3,6 +3,8 @@ service: poc-serverless-typescript
 plugins:
   - serverless-offline
   - serverless-esbuild
+  - serverless-plugin-canary-deployments
+  - serverless-aws-alias
 
 provider:
   name: aws
@@ -16,6 +18,9 @@ provider:
   apiGateway:
     restApiId: 28ivb3d4wd
     restApiRootResourceId: g6rv8zq0uc
+  aliasStage:
+    loggingLevel: "OFF"
+    dataTraceEnabled: false
 
 custom:
   headers:
@@ -31,6 +36,9 @@ custom:
 functions:
   api:
     handler: handler.handler
+    aliasStage:
+      loggingLevel: "OFF"
+      dataTraceEnabled: false
     events:
       - http:
           path: /get-all-users
@@ -38,99 +46,122 @@ functions:
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /get-tasks-by-username
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /add-user
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /add-task
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /get-single-task
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /get-single-user
           method: post
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /get-all-tasks
           method: get
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /update-user/{id}
           method: put
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /update-task/{id}
           method: put
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /delete-task/{id}
           method: delete
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+          
       - http:
           path: /delete-user/{id}
           method: delete
           cors:
             origin: "*"
             headers: ${self:custom.headers}
-          allowCredentials: true
+            allowCredentials: true
           integration: lambda
-          alias: ${self:provider.stage}
+
+    deploymentSettings: # CodeDeploy configuration
+      type: Linear10PercentEvery1Minute # Traffic shifting strategy
+      alias: ${self:provider.stage} # Alias to update
+      preTrafficHook: preTrafficHookFunction # Optional: Pre-traffic validation Lambda
+      postTrafficHook: postTrafficHookFunction # Optional: Post-traffic validation Lambda
+
+
+  Resources:
+    PreTrafficHookFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        FunctionName: ${self:service}-${self:provider.stage}-pre-traffic-hook
+        Handler: preTrafficHook.handler
+        Runtime: nodejs20.x
+        Timeout: 30
+
+    PostTrafficHookFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        FunctionName: ${self:service}-${self:provider.stage}-post-traffic-hook
+        Handler: postTrafficHook.handler
+        Runtime: nodejs20.x
+        Timeout: 30
             #test
 # resources:
 #   Resources:
