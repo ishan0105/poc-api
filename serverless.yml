@@ -4,7 +4,7 @@ plugins:
   - serverless-offline
   - serverless-esbuild
   - serverless-plugin-canary-deployments
-  - serverless-aws-alias
+  # - serverless-aws-alias
 
 provider:
   name: aws
@@ -18,9 +18,9 @@ provider:
   apiGateway:
     restApiId: 28ivb3d4wd
     restApiRootResourceId: g6rv8zq0uc
-  aliasStage:
-    loggingLevel: "OFF"
-    dataTraceEnabled: false
+  # aliasStage:
+  #   loggingLevel: "OFF"
+  #   dataTraceEnabled: false
 
 custom:
   headers:
@@ -36,9 +36,9 @@ custom:
 functions:
   api:
     handler: handler.handler
-    aliasStage:
-      loggingLevel: "OFF"
-      dataTraceEnabled: false
+    # aliasStage:
+    #   loggingLevel: "OFF"
+    #   dataTraceEnabled: false
     events:
       - http:
           path: /get-all-users
