@@ -139,11 +139,11 @@ functions:
             allowCredentials: true
           integration: lambda
 
-    deploymentSettings: # CodeDeploy configuration
-      type: Linear10PercentEvery1Minute # Traffic shifting strategy
-      alias: ${self:provider.stage} # Alias to update
-      preTrafficHook: preTrafficHookFunction # Optional: Pre-traffic validation Lambda
-      postTrafficHook: postTrafficHookFunction # Optional: Post-traffic validation Lambda
+    # deploymentSettings: # CodeDeploy configuration
+    #   type: Linear10PercentEvery1Minute # Traffic shifting strategy
+    #   alias: ${self:provider.stage} # Alias to update
+    #   preTrafficHook: preTrafficHookFunction # Optional: Pre-traffic validation Lambda
+    #   postTrafficHook: postTrafficHookFunction # Optional: Post-traffic validation Lambda
 
 # resources:
 #   Resources:
