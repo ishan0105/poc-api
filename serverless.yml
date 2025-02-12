@@ -145,23 +145,23 @@ functions:
       preTrafficHook: preTrafficHookFunction # Optional: Pre-traffic validation Lambda
       postTrafficHook: postTrafficHookFunction # Optional: Post-traffic validation Lambda
 
-resources:
-  Resources:
-    PreTrafficHookFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        FunctionName: ${self:service}-${self:provider.stage}-pre-traffic-hook
-        Handler: preTrafficHook.handler
-        Runtime: nodejs20.x
-        Timeout: 30
+# resources:
+#   Resources:
+#     PreTrafficHookFunction:
+#       Type: AWS::Lambda::Function
+#       Properties:
+#         FunctionName: ${self:service}-${self:provider.stage}-pre-traffic-hook
+#         Handler: preTrafficHook.handler
+#         Runtime: nodejs20.x
+#         Timeout: 30
 
-    PostTrafficHookFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        FunctionName: ${self:service}-${self:provider.stage}-post-traffic-hook
-        Handler: postTrafficHook.handler
-        Runtime: nodejs20.x
-        Timeout: 30
+#     PostTrafficHookFunction:
+#       Type: AWS::Lambda::Function
+#       Properties:
+#         FunctionName: ${self:service}-${self:provider.stage}-post-traffic-hook
+#         Handler: postTrafficHook.handler
+#         Runtime: nodejs20.x
+#         Timeout: 30
             #test
 # resources:
 #   Resources:
