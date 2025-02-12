@@ -145,7 +145,7 @@ functions:
       preTrafficHook: preTrafficHookFunction # Optional: Pre-traffic validation Lambda
       postTrafficHook: postTrafficHookFunction # Optional: Post-traffic validation Lambda
 
-
+resources:
   Resources:
     PreTrafficHookFunction:
       Type: AWS::Lambda::Function
